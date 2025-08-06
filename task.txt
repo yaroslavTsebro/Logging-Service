@@ -1,1 +1,18 @@
+Architecture:
+1.SDK (written in the language it will be used with)
+2.API used by the SDK
+API (with API key authentication) sends data to a queue (AWS SQS, because we need real fifo), worker-microserviceses consume the queue and store records in the database (Elasticsearch (with multi-tenancy at code or index level), separate database for users – Postgres) (core logic covered with tests by 80%)
+3.Aerting system – instant delivery and delayed delivery after N minutes with M retries (kafka-scheduler + batch sending every 10–20 seconds (possibly less)) (core logic covered with tests by 80%)
+4.Dashboard – Next.js (because of SSR) + React + TS + something for tabular logs, need to explore npm, compare options, evaluate
+5.CI/CD for development (tests on PR push, on merge to stage and main), Docker, K8S, AWS secret manager
+OR just ELK stack
 
+Questions for the product owner:
+1.What integrations are needed? Tg, calls, email, slack, teams
+2.For which languages should the SDK be available
+3.What is the main difference from existing products
+4.Should there be integrations with payment systems? What is the business model? What does the user pay for (subscription / log volume / self-hosted)?
+5.Do we allow running a self-hosted instance on the user’s machine
+6.What features are needed in the dashboard: filtering, charts, aggregation?
+7.Should we support user roles (admin, developer)?
+8.How long should logs be stored? Are there any GDPR/deletion requirements?
